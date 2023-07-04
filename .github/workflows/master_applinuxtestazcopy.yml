@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'applinuxtestazcopy'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AFCC36F4B82F4641B6752E2EF2748F11 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E8D31FA66EAA404D8DFEB9BA3AFE6B7B }}
           package: .
