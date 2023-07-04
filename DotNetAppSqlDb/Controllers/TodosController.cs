@@ -17,7 +17,7 @@ namespace DotNetAppSqlDb.Controllers
         // GET: Todos
         public ActionResult Index()
         {            
-            Trace.WriteLine("GET /Todos/Index");
+            Trace.WriteLine("GET /Todos/Index ");
             return View(db.Todoes.ToList());
         }
 
