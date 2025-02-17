@@ -1,0 +1,166 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2018-02-01",
+    "cmWebAppNameTidy": "[toLower(trim(parameters('cmWebAppName')))]",
+    "cdgrpaWebAppNameTidy": "[toLower(trim(parameters('cdgrpaWebAppName')))]",
+    "cdgrpbWebAppNameTidy": "[toLower(trim(parameters('cdgrpbWebAppName')))]",
+    "cdpreviewWebAppNameTidy": "[toLower(trim(parameters('cdpreviewWebAppName')))]",
+    "cdapprovedWebAppNameTidy": "[toLower(trim(parameters('cdapprovedWebAppName')))]",
+    "prcWebAppNameTidy": "[toLower(trim(parameters('prcWebAppName')))]"
+  },
+  "parameters": {
+    "standard": {
+      "type": "secureObject",
+      "defaultValue": {
+        "deploymentId": null,
+        "location": null,
+        "cmWebAppName": null,
+        "cdgrpaWebAppName": null,
+        "cdgrpbWebAppName": null,
+        "cdpreviewWebAppName": null,
+        "cdapprovedWebAppName": null,
+        "prcWebAppName": null
+      }
+    },
+    "extension": {
+      "type": "secureObject",
+      "defaultValue": {}
+    },
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').deploymentId, resourceGroup().name)]"
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').location, resourceGroup().location)]"
+    },
+    "cmWebAppName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').cmWebAppName, concat(parameters('deploymentId'), '-cm'))]"
+    },
+    "cdgrpaWebAppName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').cdgrpaWebAppName, concat(parameters('deploymentId'), '-cd-grp-a'))]"
+    },
+    "cdgrpbWebAppName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').cdgrpbWebAppName, concat(parameters('deploymentId'), '-cd-grp-b'))]"
+    },
+    "cdpreviewWebAppName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').cdpreviewWebAppName, concat(parameters('deploymentId'), '-cd-preview'))]"
+    },
+    "cdapprovedWebAppName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').cdapprovedWebAppName, concat(parameters('deploymentId'), '-cd-approved'))]"
+    },
+    "prcWebAppName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').prcWebAppName, concat(parameters('deploymentId'), '-prc'))]"
+    },
+    "msDeployPackageUrl": {
+      "type": "securestring",
+      "defaultValue": "[parameters('extension').msDeployPackageUrl]"
+    }
+  },
+  "resources": [
+    {
+      "name": "[concat(variables('cmWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('msDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('cdgrpaWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('msDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cdgrpaWebAppNameTidy')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('cdgrpbWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('msDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cdgrpbWebAppNameTidy')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('cdpreviewWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('msDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cdpreviewWebAppNameTidy')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('cdapprovedWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('msDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cdapprovedWebAppNameTidy')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('prcWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('msDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('prcWebAppNameTidy')]"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
