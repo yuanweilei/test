@@ -1,0 +1,199 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "webApiVersion": "2016-08-01",
+    "resourcesApiVersion": "2016-09-01",
+    "sqlServerFqdnTidy": "[toLower(trim(parameters('sqlServerFqdn')))]",
+    "coreSqlDatabaseNameTidy": "[toLower(trim(parameters('coreSqlDatabaseName')))]",
+    "cmWebAppNameTidy": "[toLower(trim(parameters('cmWebAppName')))]",
+    "cdgrpaWebAppNameTidy": "[toLower(trim(parameters('cdgrpaWebAppName')))]",
+    "cdgrpbWebAppNameTidy": "[toLower(trim(parameters('cdgrpbWebAppName')))]",
+    "cdpreviewWebAppNameTidy": "[toLower(trim(parameters('cdpreviewWebAppName')))]",
+    "cdapprovedWebAppNameTidy": "[toLower(trim(parameters('cdapprovedWebAppName')))]",
+    "prcWebAppNameTidy": "[toLower(trim(parameters('prcWebAppName')))]"
+  },
+  "parameters": {
+    "standard": {
+      "type": "secureObject",
+      "defaultValue": {
+        "infrastructure": {
+          "sqlServerFqdn": null
+        },
+        "deploymentId": null,
+        "location": null,
+        "sqlServerLogin": null,
+        "sqlServerPassword": null,
+        "coreSqlDatabaseName": null,
+        "cmWebAppName": null,
+        "cdgrpaWebAppName": null,
+        "cdgrpbWebAppName": null,
+        "cdpreviewWebAppName": null,
+        "cdapprovedWebAppName": null,
+        "prcWebAppName": null
+      }
+    },
+    "extension": {
+      "type": "secureObject",
+      "defaultValue": {
+        "cmSxaMsDeployPackageUrl": null,
+        "cdgrpaSxaMsDeployPackageUrl": null,
+        "cdgrpbSxaMsDeployPackageUrl": null,
+        "cdpreviewSxaMsDeployPackageUrl": null,
+        "cdapprovedSxaMsDeployPackageUrl": null,
+        "prcSxaMsDeployPackageUrl": null,
+        "speMsDeployPackageUrl": null,
+        "solrCorePrefix": "sitecore"
+      }
+    },
+    "templateLinkBase": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[uri(replace(json(string(deployment().properties.templateLink)).uri,' ','%20'), '.')]"
+    },
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').deploymentId, resourceGroup().name)]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').location, resourceGroup().location)]"
+    },
+    "sqlServerFqdn": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').infrastructure.sqlServerFqdn, concat(parameters('deploymentId'), '-sql.database.windows.net'))]"
+    },
+    "sqlServerLogin": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('standard').sqlServerLogin]"
+    },
+    "sqlServerPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[parameters('standard').sqlServerPassword]"
+    },
+    "coreSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').coreSqlDatabaseName, concat(parameters('deploymentId'), '-core-db'))]"
+    },
+
+    "cdgrpaWebAppName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').cdgrpaWebAppName, concat(parameters('deploymentId'), '-cd-grp-a'))]"
+    },
+    "cdgrpbWebAppName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').cdgrpbWebAppName, concat(parameters('deploymentId'), '-cd-grp-b'))]"
+    },
+    "cdpreviewWebAppName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').cdpreviewWebAppName, concat(parameters('deploymentId'), '-cd-preview'))]"
+    },
+    "cdapprovedWebAppName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').cdapprovedWebAppName, concat(parameters('deploymentId'), '-cd-approved'))]"
+    },
+    "prcWebAppName": {
+      "type": "string",
+      "defaultValue": "[coalesce(parameters('standard').prcWebAppName, concat(parameters('deploymentId'), '-prc'))]"
+    },
+    "cmWebAppName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[coalesce(parameters('standard').cmWebAppName, concat(parameters('deploymentId'), '-cm'))]"
+    },
+    "speMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extension').speMsDeployPackageUrl]"
+    },
+    "cdgrpaSxaMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extension').cdgrpaSxaMsDeployPackageUrl]"
+    },
+    "cdgrpbSxaMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extension').cdgrpbSxaMsDeployPackageUrl]"
+    },
+    "cdpreviewSxaMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extension').cdpreviewSxaMsDeployPackageUrl]"
+    },
+    "cdapprovedSxaMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extension').cdapprovedSxaMsDeployPackageUrl]"
+    },
+    "prcSxaMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extension').prcSxaMsDeployPackageUrl]"
+    },
+    "cmSxaMsDeployPackageUrl": {
+      "type": "securestring",
+      "minLength": 1,
+      "defaultValue": "[parameters('extension').cmSxaMsDeployPackageUrl]"
+    },
+    "solrCorePrefix": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[parameters('extension').solrCorePrefix]"
+    }
+  },
+  "resources": [
+    {
+      "name": "[concat(variables('cmWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('speMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Core Admin Connection String": "[concat('Encrypt=True;TrustServerCertificate=False;Data Source=', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=',variables('coreSqlDatabaseNameTidy'),';User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]"
+            }
+          },
+          {
+            "packageUri": "[parameters('cmSxaMsDeployPackageUrl')]",
+            "dbType": "SQL",
+            "connectionString": "[concat('Data Source=tcp:', variables('sqlServerFqdnTidy'), ',1433;Initial Catalog=master;User Id=', parameters('sqlServerLogin'), ';Password=', parameters('sqlServerPassword'), ';')]",
+            "setParameters": {
+              "Application Path": "[variables('cmWebAppNameTidy')]",
+              "Solr Master Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_master_index')]",
+              "Solr Web Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_web_index')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('cdWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('cdSxaMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cdWebAppNameTidy')]",
+              "Solr Master Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_master_index')]",
+              "Solr Web Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_web_index')]"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
