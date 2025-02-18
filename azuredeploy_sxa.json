@@ -77,7 +77,6 @@
       "minLength": 1,
       "defaultValue": "[coalesce(parameters('standard').coreSqlDatabaseName, concat(parameters('deploymentId'), '-core-db'))]"
     },
-
     "cdgrpaWebAppName": {
       "type": "string",
       "defaultValue": "[coalesce(parameters('standard').cdgrpaWebAppName, concat(parameters('deploymentId'), '-cd-grp-a'))]"
@@ -93,10 +92,6 @@
     "cdapprovedWebAppName": {
       "type": "string",
       "defaultValue": "[coalesce(parameters('standard').cdapprovedWebAppName, concat(parameters('deploymentId'), '-cd-approved'))]"
-    },
-    "prcWebAppName": {
-      "type": "string",
-      "defaultValue": "[coalesce(parameters('standard').prcWebAppName, concat(parameters('deploymentId'), '-prc'))]"
     },
     "cmWebAppName": {
       "type": "string",
