@@ -226,9 +226,9 @@
       "properties": {
         "addOnPackages": [
           {
-            "packageUri": "[parameters('cdSxaMsDeployPackageUrl')]",
+            "packageUri": "[parameters('cdapprovedSxaMsDeployPackageUrl')]",
             "setParameters": {
-              "Application Path": "[variables('cdapprovedSxaMsDeployPackageUrl')]",
+              "Application Path": "[variables('cdapprovedWebAppNameTidy')]",
               "Solr Master Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_master_index')]",
               "Solr Web Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_web_index')]"
             }
