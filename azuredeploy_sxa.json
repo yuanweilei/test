@@ -10,8 +10,7 @@
     "cdgrpaWebAppNameTidy": "[toLower(trim(parameters('cdgrpaWebAppName')))]",
     "cdgrpbWebAppNameTidy": "[toLower(trim(parameters('cdgrpbWebAppName')))]",
     "cdpreviewWebAppNameTidy": "[toLower(trim(parameters('cdpreviewWebAppName')))]",
-    "cdapprovedWebAppNameTidy": "[toLower(trim(parameters('cdapprovedWebAppName')))]",
-    "prcWebAppNameTidy": "[toLower(trim(parameters('prcWebAppName')))]"
+    "cdapprovedWebAppNameTidy": "[toLower(trim(parameters('cdapprovedWebAppName')))]"
   },
   "parameters": {
     "standard": {
@@ -29,8 +28,7 @@
         "cdgrpaWebAppName": null,
         "cdgrpbWebAppName": null,
         "cdpreviewWebAppName": null,
-        "cdapprovedWebAppName": null,
-        "prcWebAppName": null
+        "cdapprovedWebAppName": null
       }
     },
     "extension": {
@@ -172,7 +170,61 @@
       }
     },
     {
-      "name": "[concat(variables('cdWebAppNameTidy'), '/', 'MSDeploy')]",
+      "name": "[concat(variables('cdgrpaWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('cdgrpaSxaMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cdgrpaWebAppNameTidy')]",
+              "Solr Master Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_master_index')]",
+              "Solr Web Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_web_index')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('cdgrpbWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('cdgrpbSxaMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cdgrpbWebAppNameTidy')]",
+              "Solr Master Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_master_index')]",
+              "Solr Web Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_web_index')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('cdpreviewWebAppNameTidy'), '/', 'MSDeploy')]",
+      "type": "Microsoft.Web/sites/extensions",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('webApiVersion')]",
+      "properties": {
+        "addOnPackages": [
+          {
+            "packageUri": "[parameters('cdpreviewSxaMsDeployPackageUrl')]",
+            "setParameters": {
+              "Application Path": "[variables('cdpreviewWebAppNameTidy')]",
+              "Solr Master Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_master_index')]",
+              "Solr Web Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_web_index')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "[concat(variables('cdapprovedWebAppNameTidy'), '/', 'MSDeploy')]",
       "type": "Microsoft.Web/sites/extensions",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('webApiVersion')]",
@@ -181,7 +233,7 @@
           {
             "packageUri": "[parameters('cdSxaMsDeployPackageUrl')]",
             "setParameters": {
-              "Application Path": "[variables('cdWebAppNameTidy')]",
+              "Application Path": "[variables('cdapprovedSxaMsDeployPackageUrl')]",
               "Solr Master Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_master_index')]",
               "Solr Web Index Name": "[concat(parameters('solrCorePrefix'), '_sxa_web_index')]"
             }
