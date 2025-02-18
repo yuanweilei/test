@@ -41,7 +41,6 @@
         "cdgrpbSxaMsDeployPackageUrl": null,
         "cdpreviewSxaMsDeployPackageUrl": null,
         "cdapprovedSxaMsDeployPackageUrl": null,
-        "prcSxaMsDeployPackageUrl": null,
         "speMsDeployPackageUrl": null,
         "solrCorePrefix": "sitecore"
       }
@@ -130,11 +129,6 @@
       "type": "securestring",
       "minLength": 1,
       "defaultValue": "[parameters('extension').cdapprovedSxaMsDeployPackageUrl]"
-    },
-    "prcSxaMsDeployPackageUrl": {
-      "type": "securestring",
-      "minLength": 1,
-      "defaultValue": "[parameters('extension').prcSxaMsDeployPackageUrl]"
     },
     "cmSxaMsDeployPackageUrl": {
       "type": "securestring",
